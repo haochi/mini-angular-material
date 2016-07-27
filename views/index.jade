@@ -1,0 +1,45 @@
+doctype html
+html(lang="en")
+  head
+    title Sales Tax Calculator
+    link(rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css")
+    link(rel="stylesheet" href="../css/app.css")
+
+  body(ng-app="app" ng-controller="controller as ctrl" layout="column")
+
+    md-toobar(layout="row")
+      h1 Sales Tax Calculator
+
+    div(flex layout="row")
+      md-content(flex)
+        div(ng-show='ctrl.isDisplay()')
+          md-list()
+            md-subheader Cart Total: {{ ctrl.total() | currency }}
+            md-list-item(ng-repeat='entry in ctrl.entries')
+              p {{ entry.item.display }} {{ entry.item.price | currency }} &times; {{ entry.count }} = {{ entry.subTotal() | currency }}
+
+        form(name='ctrl.addForm' ng-show='ctrl.isAdd()')
+          md-autocomplete(required md-selected-item='ctrl.entry.item' md-search-text='ctrl.searchText' md-items='item in ctrl.items | filter:ctrl.searchText' md-item-text='item.display' placeholder="Search for an item to add to cart.")
+            md-item-template
+              span(md-highlight-text='ctrl.searchText' md-highlight-flags='^i') {{item.display}}
+          
+          md-input-container.md-block
+            label Count
+            input(required name='count' ng-model='ctrl.entry.count' type='number')
+
+            div(ng-messages='ctrl.addForm.count.$error')
+              div(ng-message='required') This is required.
+
+          div(layout="row" layout-align="center end")
+            md-button(ng-click="ctrl.cancel()") Cancel
+            md-button(ng-click="ctrl.addEntry()" ng-disabled="ctrl.addForm.$invalid" class="md-primary") Save
+
+      md-button.md-fab.md-primary.md-fab-bottom-right(aria-label='menu' ng-click="ctrl.showAddForm()" ng-hide="ctrl.isAdd()") +
+        
+    // scripts
+    script(src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js")
+    script(src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js")
+    script(src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js")
+    script(src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js")
+    script(src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js")
+    script(src='../js/index.js')
