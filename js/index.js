@@ -24,9 +24,19 @@ angular.module('app', ['ngMaterial'])
     { value: '3', display: 'Chicken', price: 3 },
   ];
 
-  this.total = () => {
+  this.subTotal = () => {
     return this.entries.reduce((memo, me) => memo + me.subTotal(), 0);
   };
+
+  this.total = () => {
+    return this.subTotal() + this.tax();
+  };
+
+  this.tax = () => {
+    return this.subTotal() * this.taxRate / 100;
+  };
+
+  this.taxRate = 7.5; // percent
 
   this.addEntry = () => {
     this.entries.push(this.entry);
